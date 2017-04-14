@@ -1,0 +1,12 @@
+*.pdf
+*.dvi
+*.log
+*#
+*~
+*.aux
+*latexmk
+*.fls
+*.log
+*.out
+*.xml
+.#*
