@@ -57,15 +57,15 @@
 \section{Problem}
 Suppose you have a particle moving according to the following SDE:
 
-\begin{align}
+\begin{align*}
   dX_t = \noise dW_t,
-\end{align}
+\end{align*}
 with $W_t$ Brownian motion. The process starts at $x \in (0,1)$. We are
 interested in 
 
-\begin{align}
+\begin{align*}
   \want = \Pr( |X_1| > 1 ) =:\Pr(A). 
-\end{align}
+\end{align*}
 
 \section{Naiive estimator}
 The naive estimator will require an exponential number of samples since 
@@ -73,28 +73,95 @@ $X_1 \sim \N( x, \epsilon )$ and $A$ is a rare event.
 
 \section{Second Estimator}
 We can use the instanton 
-\begin{align}
+\begin{align*}
   \phi(t) = (1-t)x + t
-\end{align}
+\end{align*}
 and generate the biased process
-\begin{align}
+\begin{align*}
 dY_t = \dot{\phi}(t)dt + \noise dW_t
-\end{align}
+\end{align*}
 which also starts at $x$. The process is
-\begin{align}
+\begin{align*}
   Y_t = (1-t)x + t + \noise W_t
-\end{align}
+\end{align*}
 and
-\begin{align}
+\begin{align*}
   Y_1 = 1 + \noise W_1.
-\end{align}
-Girsano'v theorem states
+\end{align*}
 
-Using girsanov's theorem, we find the change of measure factor to be
+\subsection{Girsanov}
+Girsanov's theorem (Oksendal, Theorem 8.6.6) states (in 1D, without details)
+the following. Let $Y_t$ an Ito process of the form
+\begin{align*}
+  dY_t = \beta(t,\omega)dt + \theta(t,\omega) dB_t
+\end{align*} 
+and 
+\begin{align*}
+  \theta(t,\omega) u(t,\omega) = \beta(t,\omega) - \alpha(t,\omega).
+\end{align*}
+Take
+\begin{align*}
+  M_t = \exp \bigg ( 
+  - \int_0^t u(s,\omega) dB_s -\frac{1}{2} \int_0^t u^2(s,\omega) ds 
+  \bigg )
+\end{align*}
+and $d\mathbb{Q}(\omega) = M_T d\mathbb{P}(\omega)$. Then 
+\begin{align*}
+  \hat{B}_t : = \int_0^t u(s,\omega) ds + B_t 
+\end{align*}
+is BM wrt $\mathbb{Q}$ and
+\begin{align*}
+  dY_t = \alpha(t,\omega) dt + \theta( t,\omega )d\hat{B}_t.
+\end{align*}
+
+\subsection{In our case}
+In our case $dX_t = \noise dW_t$, so $\beta \equiv 0$ and $\theta \equiv \noise$.
+We want to finish with a new process with $\alpha = \dot{\phi}$ so this can only
+mean $u = -\frac{\dot{\phi}(t)}{\noise}$. Thus
+\begin{align*}
+  M_t &= \exp \bigg ( - \int_0^t -\frac{\dot{\phi}(t)}{\noise}dW_s 
+  -\frac{1}{2} \int_0^t \frac{\dot{\phi}^2(t)}{\epsilon}ds \bigg ) \\
+  %
+  %
+  %
+  &=  \exp \bigg ( \frac{1}{\noise} \int_0^t \dot{\phi}(t)dW_s 
+  -\frac{1}{2\epsilon} \int_0^t \dot{\phi}^2(t)ds \bigg ). \\
+\end{align*}
+We want to calculate the following:
+\begin{align*}
+  p^{\epsilon} = \mathbb{P}(A) = \int_A d\mathbb{P}(\omega) = 
+  \int_A M_{T=1}^{-1} d\mathbb{Q}(\omega) = \mathbb{E}_{\mathbb{Q}}[\mathbf{1}_{A} M_{T=1}^{-1}].
+\end{align*}
+Under $\mathbb{Q}$, we know that $dX_t = \dot{\phi}(t) + \noise d\hat{W}_t$, so 
+we can just call it $Y_t$ and drop the hat on $W$ (as we did above). If we do that,
+then $dY_t = \dot{\phi}(t) + \noise dW_t$ and:
 \begin{align}
-
+  \begin{split}
+  p^{\epsilon} &= \mathbb{E}\left [ \mathbf{1}_{ |Y_t| > 1 } \exp \left (
+      -\frac{1}{\noise} \int_0^1 \dot{\phi}(s)dW_s  
+      +\frac{1}{2\epsilon} \int_0^1 \dot{\phi}^2(s)ds \right ) \right ] \\
+  %
+  %
+  %
+  &= \mathbb{E}\left [ \mathbf{1}_{ |Y_t| > 1 } \exp \left (
+      -\frac{1}{\noise} \int_0^1 (1-x) dW_s  
+      +\frac{1}{2\epsilon} \int_0^1 (1-x)^2 ds \right ) \right ] \\
+  %
+  %
+  %
+  &= \mathbb{E}\left [ \mathbf{1}_{ |Y_t| > 1 } \exp \left (
+      -\frac{1-x}{\noise} W_1 +\frac{(1-x)^2}{2\epsilon} \right ) \right ] \\
+  %
+  %
+  %
+  &= \mathbb{E}\left [ \mathbf{1}_{ |Y_t| > 1 } \exp \left (
+     \frac{x-1}{\noise} W_1 +\frac{(1-x)^2}{2\epsilon} \right ) \right ] \\
+ \end{split}
 \end{align}
 
+\ydnote{Are my calculations correct? 
+  Anyone wants to fill in the calculation that shows this is an 
+  unbiased estimator? C'mon.}
 %\printbibliography
 
 \end{document}
