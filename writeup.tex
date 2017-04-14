@@ -1,0 +1,101 @@
+\documentclass[11pt]{amsart}
+\usepackage{amsfonts,amsbsy}
+\usepackage[pdftex]{graphicx}
+\usepackage{amsaddr}
+\usepackage{setspace}
+\usepackage{caption}
+%\usepackage[margin=1.5in]{geometry}
+
+\usepackage[framemethod=tikz,innerleftmargin=0]{mdframed}
+
+
+
+
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\want}{p^{\epsilon}}
+\newcommand{\noise}{\sqrt{\epsilon}}
+
+
+
+
+\newcommand{\kknote}[1]{{\textcolor{blue}{#1}}}
+\newcommand{\ydnote}[1]{{\textcolor{cyan}{#1}}}
+\newcommand{\dmnote}[1]{{\textcolor{green}{#1}}}
+
+% bibliography
+% \usepackage[style=authoryear,backend=bibtex,natbib=true]{biblatex}
+
+% \renewbibmacro{in:}{}
+
+% \addbibresource{refs.bib}
+
+% theorem commands 
+
+
+\begin{document}
+
+\title{Exercise}
+
+\author{Yair Daon}
+\address{Courant Institute of Mathematical Sciences \\ New York University \\ 251 Mercer St., New York, NY}
+
+
+\thanks{Me!!!} 
+\date{\today}
+
+\begin{abstract}
+  A write up of the exercise for Eric's class.
+\end{abstract}
+
+
+\maketitle
+
+
+\section{Hi}
+\ydnote{This is my note}. \kknote{This is KKK's note}. \dmnote{Guess what this is}.
+%\onehalfspacing
+\section{Problem}
+Suppose you have a particle moving according to the following SDE:
+
+\begin{align}
+  dX_t = \noise dW_t,
+\end{align}
+with $W_t$ Brownian motion. The process starts at $x \in (0,1)$. We are
+interested in 
+
+\begin{align}
+  \want = \Pr( |X_1| > 1 ) =:\Pr(A). 
+\end{align}
+
+\section{Naiive estimator}
+The naive estimator will require an exponential number of samples since 
+$X_1 \sim \N( x, \epsilon )$ and $A$ is a rare event.
+
+\section{Second Estimator}
+We can use the instanton 
+\begin{align}
+  \phi(t) = (1-t)x + t
+\end{align}
+and generate the biased process
+\begin{align}
+dY_t = \dot{\phi}(t)dt + \noise dW_t
+\end{align}
+which also starts at $x$. The process is
+\begin{align}
+  Y_t = (1-t)x + t + \noise W_t
+\end{align}
+and
+\begin{align}
+  Y_1 = 1 + \noise W_1.
+\end{align}
+Girsano'v theorem states
+
+Using girsanov's theorem, we find the change of measure factor to be
+\begin{align}
+
+\end{align}
+
+%\printbibliography
+
+\end{document}
+
