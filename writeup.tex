@@ -14,8 +14,9 @@
 \newcommand{\N}{\mathcal{N}}
 \newcommand{\want}{p^{\epsilon}}
 \newcommand{\noise}{\sqrt{\epsilon}}
-
-
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\ind}{\mathbf{1}}
+\newcommand{\R}{\mathbb{R}}
 
 
 \newcommand{\kknote}[1]{{\textcolor{magenta}{#1}}}
@@ -131,117 +132,160 @@ mean $u = -\frac{\dot{\phi}(t)}{\noise}$. Thus
   &=  \exp \bigg ( \frac{1}{\noise} \int_0^t \dot{\phi}(t)dW_s 
   -\frac{1}{2\epsilon} \int_0^t \dot{\phi}^2(t)ds \bigg ). \\
 \end{align*}
+%
+We record the explicit expression we use:
+%
+\begin{align}\label{eq:explicit M}
+  M_{T=1}^{-1} &= \exp \bigg ( \frac{x-1}{\noise} W_1 
+  +\frac{(1-x)^2}{2\epsilon}  \bigg ).
+\end{align}
+%
 We want to calculate the following:
+%
 \begin{align*}
-  p^{\epsilon} = \mathbb{P}(A) = \int_A d\mathbb{P}(\omega) = 
-  \int_A M_{T=1}^{-1} d\mathbb{Q}(\omega) = \mathbb{E}_{\mathbb{Q}}[\mathbf{1}_{A} M_{T=1}^{-1}].
+  \want = \mathbb{P}(A) = \int_A d\mathbb{P}(\omega) = 
+  \int_A M_{T=1}^{-1} d\mathbb{Q}(\omega) = \E_{\mathbb{Q}}[\ind_{A} M_{T=1}^{-1}].
 \end{align*}
 Under $\mathbb{Q}$, we know that $dX_t = \dot{\phi}(t) + \noise d\hat{W}_t$, so 
 we can just call it $Y_t$ and drop the hat on $W$ (as we did above). If we do that,
 then $dY_t = \dot{\phi}(t) + \noise dW_t$ and:
+\ydnote{given expression \eqref{eq:explicit M} this is redundant I think...}
 \begin{align}
   \begin{split}
-  p^{\epsilon} &= \mathbb{E}\left [ \mathbf{1}_{ |Y_t| > 1 } \exp \left (
+  \want &= \E\left [ \ind_{ |Y_t| > 1 } \exp \left (
       -\frac{1}{\noise} \int_0^1 \dot{\phi}(s)dW_s  
       +\frac{1}{2\epsilon} \int_0^1 \dot{\phi}^2(s)ds \right ) \right ] \\
   %
   %
   %
-  &= \mathbb{E}\left [ \mathbf{1}_{ |Y_t| > 1 } \exp \left (
+  &= \E\left [ \ind_{ |Y_t| > 1 } \exp \left (
       -\frac{1}{\noise} \int_0^1 (1-x) dW_s  
       +\frac{1}{2\epsilon} \int_0^1 (1-x)^2 ds \right ) \right ] \\
   %
   %
   %
-  &= \mathbb{E}\left [ \mathbf{1}_{ |Y_t| > 1 } \exp \left (
+  &= \E\left [ \ind_{ |Y_t| > 1 } \exp \left (
       -\frac{1-x}{\noise} W_1 +\frac{(1-x)^2}{2\epsilon} \right ) \right ] \\
   %
   %
   %
-  &= \mathbb{E}\left [ \mathbf{1}_{ |Y_t| > 1 } \exp \left (
+  &= \E\left [ \ind_{ |Y_t| > 1 } \exp \left (
      \frac{x-1}{\noise} W_1 +\frac{(1-x)^2}{2\epsilon} \right ) \right ] \\
  \end{split}
 \end{align}
 
 \subsection{First Moment}
-Let $ A = \{ Y : |Y| \geq 1 \}$. Noting that $Y_1 = 1 + \sqrt{\epsilon}W_1$ we have that: 
+Let $ A = \{ Y : |Y| \geq 1 \}$. Noting that $Y_1 = 1 + \noise W_1$
+we have that: 
 \begin{align}
-  \mathbb{E}\left [ \mathbf{1}_{ |Y_t| > 1 } \exp \left (
+  \E\left [ \ind_{ |Y_t| > 1 } \exp \left (
      \frac{x-1}{\noise} W_1 +\frac{(1-x)^2}{2\epsilon} \right ) \right ] =
-   \int_{\mathbb{R}} \mathbf{1}_{A}(1+\sqrt{\epsilon}z)\exp^{-(\frac{(1-x)z}{\sqrt{\epsilon}}+\frac{(1-x)^2}{2\epsilon}+\frac{z^2}{2})} \frac{dz}{\sqrt{2\pi}} \\
+   \int_{\R} \ind_{A}(1+\noise z)\exp^{-(\frac{(1-x)z}{\noise}+\frac{(1-x)^2}{2\epsilon}+\frac{z^2}{2})} \frac{dz}{\sqrt{2\pi}} \\
 \end{align}
-Letting $z = \frac{y-1}{\sqrt{\epsilon}} \implies dz = \frac{dy}{\sqrt{\epsilon}} \implies $ 
+Letting $z = \frac{y-1}{\noise} \implies dz = \frac{dy}{\noise} \implies $ 
 \begin{align}
   \begin{split}
-  \want &= \int_{\mathbb{R}} \mathbf{1}_{A}(y)\exp^{-(\frac{(1-x)(1-y)}{\epsilon}+\frac{(1-x)^2}{2\epsilon}+\frac{(y-1)^2}{2\epsilon})} \frac{dz}{\sqrt{2\pi\epsilon}} \\
-  %
-  %
-  %
-  &= \int_{\mathbb{R}} \mathbf{1}_{A}(y)\exp^{-\frac{(y-x)^2}{2\epsilon}} \frac{dz}{\sqrt{2\pi\epsilon}} \\
-  %
-  %
-  %
-  &= 2\int_{1}^{\infty} \mathbf{1}_{A}(y)\exp^{-\frac{(y-x)^2}{2\epsilon}} \frac{dz}{\sqrt{2\pi\epsilon}} \\
-  %
-  %
-  %
-  &= \Pr( |X_1| > 1 ) \\
- \end{split}
-\end{align}
-Thus $\mathbb{E}_{\mathbb{Q}}[\mathbf{1}_{A}(Y_1) M_{T=1}^{-1}]$ is an unbiased estimator. 
-
-\subsection{Second Moment}
-Now we compute the second moment for $\mathbb{E}_{\mathbb{Q}}[\mathbf{1}_{A}(Y_1) M_{T=1}^{-1}]$. 
-\begin{align}
-  \begin{split}
-  (p^{\epsilon})^2 &= \mathbb{E}_{\mathbb{Q}}[\mathbf{1}_{A}(Y_1) M_{T=1}^{-1}] \\
-   %
-   %
-   % 
-   &= \int_{\mathbb{R}} \mathbf{1}_{A}(1+\sqrt{\epsilon}z)\exp^{-\frac{2(1-x)z}{\sqrt{\epsilon}}-\frac{(1-x)^2}{\epsilon}-\frac{z^2}{2}} \frac{dz}{\sqrt{2\pi}} \\
+    \want &= \int_{\R} \ind_{A}(y)
+    \exp^{-(\frac{(1-x)(y-1)}{\epsilon}+\frac{(1-x)^2}{2\epsilon}+\frac{(y-1)^2}{2\epsilon})}
+    \frac{dy}{\sqrt{2\pi\epsilon}} \\
+    %
+    %
+    %
+    &= \int_{\R} \ind_{A}(y)
+    \exp^{-\frac{1}{2\epsilon} (-2 - 2xy +2x +2y + 1 + x^2 -2x + 1 +y^2 -2y  )}
+    \frac{dy}{\sqrt{2\pi\epsilon}} \\ 
+    %
+    %
+    %
+    &= \int_{\R} \ind_{A}(y) \exp^{-\frac{(y-x)^2}{2\epsilon}}
+    \frac{dy}{\sqrt{2\pi\epsilon}} \\
+    %
+    %
+    %
+    &= 2\int_{1}^{\infty} \exp^{-\frac{(y-x)^2}{2\epsilon}}
+    \frac{dy}{\sqrt{2\pi\epsilon}} \\
+    %
+    %
+    %
+    &= \Pr( |X_1| > 1 ) \\
   \end{split}
 \end{align}
-Letting $y = \sqrt{\epsilon}z \implies dz = \frac{dy}{\sqrt{\epsilon}}$
+Thus $\E_{\mathbb{Q}}[\ind_{A}(Y_1) M_{T=1}^{-1}]$ is an unbiased estimator. 
+
+\subsection{Second Moment}
+Now we compute the second moment for
+$\Theta :=\ind_{A}(Y_1) M_{T=1}^{-1}$.
+\ydnote{you dont compute the second moment of a number, but that of
+  a RV, hence I removed the expectation. Similarly below, I replaced
+  $\want^2$}
 \begin{align}
   \begin{split}
- (p^{\epsilon})^2 &= \int_{\mathbb{R}} \mathbf{1}_{A}(1+y)\exp^{-\frac{1}{2}(\frac{4(1-x)y}{\epsilon}+\frac{2(1-x)^2}{\epsilon}+\frac{y^2}{\epsilon})} \frac{dz}{\sqrt{2\pi\epsilon}} \\
-  %
-  %
-  %
-  &= \int_{\mathbb{R}} \mathbf{1}_{A}(y)\exp^{-\frac{(y-x)^2}{2\epsilon}} \frac{dz}{\sqrt{2\pi\epsilon}} \\
-  %
-  %
-  %
-  &= \int_{\mathbb{R}} \mathbf{1}_{A}(y)\exp^{\frac{-(y+2(1-x))^2}{2\epsilon}+\frac{(1-x)^2}{\epsilon}} \frac{dy}{\sqrt{2\pi\epsilon}}\\
-  %
-  %
-  %
-  &= (\int_{-\infty}^{-2}+\int_{0}^{\infty})\exp^{\frac{-(y+2(1-x))^2}{2\epsilon}+\frac{(1-x)^2}{\epsilon}} \frac{dy}{\sqrt{2\pi\epsilon}}\\
- \end{split}
+    \E_{\mathbb{Q}}[\Theta^2]
+    &= \E_{\mathbb{Q}}[\ind_{A}^2(Y_1) M_{T=1}^{-2}] \\
+    %
+    %
+    %
+    &= \int_{\R} \ind_{A}(1+\noise z)
+    \exp^{-\frac{2(1-x)z}{\noise}-\frac{(1-x)^2}{\epsilon}-\frac{z^2}{2}}
+    \frac{dz}{\sqrt{2\pi}} \\
+  \end{split}
 \end{align}
-Where the second to last equality comes from the fact that $y^2+4(1-x)y+2(1-x)^2=(y+2(1-x))^2-2(1-x)^2$
-\\
+Letting $y = \noise z \implies dz = \frac{dy}{\noise}$
+\begin{align}
+  \begin{split}
+    \E_{\mathbb{Q}}[\Theta^2]
+    &= \int_{\R} \ind_{A}(1+y)
+    \exp^{-\frac{1}{2}(\frac{4(1-x)y}{\epsilon}+\frac{2(1-x)^2}{\epsilon}+\frac{y^2}{\epsilon})}
+    \frac{dy}{\sqrt{2\pi\epsilon}} \\
+    %
+    %
+    %
+    &= \int_{\R} \ind_{A}(1+y)
+    \exp^{\frac{-(y+2(1-x))^2}{2\epsilon}+\frac{(1-x)^2}{\epsilon}}
+    \frac{dy}{\sqrt{2\pi\epsilon}}\\
+    %
+    %
+    %
+    &= (\int_{-\infty}^{-2}+\int_{0}^{\infty})
+    \exp^{\frac{-(y+2(1-x))^2}{2\epsilon}+\frac{(1-x)^2}{\epsilon}}
+    \frac{dy}{\sqrt{2\pi\epsilon}}\\
+  \end{split}
+\end{align}
+Where the second equality comes from the fact that
+$y^2+4(1-x)y+2(1-x)^2=(y+2(1-x))^2-2(1-x)^2$.
+
 Letting $z = y+2(1-x) \implies$
 \begin{align}
   \begin{split}
- (p^{\epsilon})^2 &= (\int_{-\infty}^{-2x}+\int_{2-2x}^{\infty})\exp^{\frac{-z^2}{2\epsilon}+\frac{(1-x)^2}{\epsilon}} \frac{dz}{\sqrt{2\pi\epsilon}} \\
-  %
-  %
-  %
-  &= (\int_{2x}^{\infty}+\int_{2-2x}^{\infty})\exp^{\frac{-z^2}{2\epsilon}+\frac{(1-x)^2}{\epsilon}} \frac{dz}{\sqrt{2\pi\epsilon}} \\
- \end{split}
+    \E_{\mathbb{Q}}[\Theta^2]
+    &= (\int_{-\infty}^{-2x}+\int_{2-2x}^{\infty})
+    \exp^{\frac{-z^2}{2\epsilon}+\frac{(1-x)^2}{\epsilon}}
+    \frac{dz}{\sqrt{2\pi\epsilon}} \\
+    %
+    %
+    %
+    &= (\int_{2x}^{\infty}+\int_{2-2x}^{\infty})
+    \exp^{\frac{-z^2}{2\epsilon}+\frac{(1-x)^2}{\epsilon}}
+    \frac{dz}{\sqrt{2\pi\epsilon}} \\
+  \end{split}
 \end{align}
+%
+%
 \begin{figure}[h]
 \caption{Plot of $z = 2x$ and $z = 2-2x$}
 \includegraphics[scale=0.4]{plot.pdf}
 \end{figure}
-Looking at figure 1, we can see that for small enough $\epsilon$, the second moment is dominated by different values depending on x. There are two cases to consider: 
+%
+%
+Looking at figure 1, we can see that for small enough
+$\epsilon$, the second moment is dominated by different
+values depending on $x$. There are two cases to consider: 
 \\
-For $1 > x > \frac{1}{2}$, $(p^{\epsilon})^2(x) \asymp \exp^{\frac{(1-x)^2}{\epsilon}-\frac{(2-2x)^2}{2\epsilon}} = \exp^{-\frac{(x-1)^2}{\epsilon}} \implies \lim_{\epsilon \to 0} (p^{\epsilon})^2 = 0$
+For $1 > x > \frac{1}{2}$, $(\want)^2(x) \asymp \exp^{\frac{(1-x)^2}{\epsilon}-\frac{(2-2x)^2}{2\epsilon}} = \exp^{-\frac{(x-1)^2}{\epsilon}} \implies \lim_{\epsilon \to 0} (\want)^2 = 0$
 \\
-For $0 < x < \frac{1}{2}$, $(p^{\epsilon})^2(x) \asymp \exp^{\frac{(1-x)^2}{\epsilon}-\frac{(2x)^2}{2\epsilon}} = \exp{\frac{1-2x-x^2}{\epsilon}}$. For $x \in (0,\sqrt{2}-1]$, $1-2x-x^2 > 0 \implies \lim_{\epsilon \to 0} (p^{\epsilon})^2(x) = \infty$ 
+For $0 < x < \frac{1}{2}$, $(\want)^2(x) \asymp \exp^{\frac{(1-x)^2}{\epsilon}-\frac{(2x)^2}{2\epsilon}} = \exp{\frac{1-2x-x^2}{\epsilon}}$. For $x \in (0,\sqrt{2}-1]$, $1-2x-x^2 > 0 \implies \lim_{\epsilon \to 0} (\want)^2(x) = \infty$ 
 \\
-Thus, the relative error of the estimator, which is $\text{Rel. error} = \frac{(p^{\epsilon})^2}{N\int_{\mathbb{R}}\mathbf{1}_{A}(Y)M^{-1}_{T}(Y) dY} \to \infty$ as $\epsilon \to 0$. This is not generally a good method to approximate $P(A)$ in practice. 
+Thus, the relative error of the estimator, which is $\text{Rel. error} = \frac{(\want)^2}{N\int_{\R}\ind_{A}(Y)M^{-1}_{T}(Y) dY} \to \infty$ as $\epsilon \to 0$. This is not generally a good method to approximate $P(A)$ in practice. 
 
 \section{Better Estimator}
 Consider the process: 
@@ -250,6 +294,7 @@ dZ_t = (1-Z_t)dt + \noise dW_t
 \end{align*}
 
 \kknote{Anyone want to start this part up? i.e., use Girsanov to write out $M_T$ for this process?}
+\ydnote{We can do it. Stronger, together.}
 %\printbibliography
 
 \end{document}
