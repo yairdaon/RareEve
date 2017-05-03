@@ -217,7 +217,7 @@ Now we compute the second moment for
 $\Theta :=\ind_{A}(Y_1) M_{T=1}^{-1}$.
 \ydnote{you dont compute the second moment of a number, but that of
   a RV, hence I removed the expectation. Similarly below, I replaced
-  $\want^2$}
+  $(\want)^2$}
 \begin{align}
   \begin{split}
     \E_{\mathbb{Q}}[\Theta^2]
@@ -292,10 +292,46 @@ Consider the process:
 \begin{align*}
 dZ_t = (1-Z_t)dt + \noise dW_t
 \end{align*}
+Again we are interested in approximating $\want$ using $Z_t$. 
+\\
+More precisely, we use Girsanov's Theorem (Theorem 8.6.6) and the same procedure as in section with $\beta(t,\omega) = 0$, $\alpha(t,\omega,X) = 1-X$, and $\Theta(t,\omega) = \sqrt{\epsilon} $ to say that: 
+\begin{align}
+\want = \E\left [ \ind_{ A }(Z_1) \hat{M}_{T=1}^{-1} \right ] 
+\end{align} 
+Where $\hat{M}_{T=1}^{-1} = \exp{-\frac{1}{\sqrt{\epsilon}}\int_{0}^{1}(1-Z_t)dW_t + \frac{1}{2\epsilon}\int_{0}^{1}(1-Z_t)^2dt}$
 
-\kknote{Anyone want to start this part up? i.e., use Girsanov to write out $M_T$ for this process?}
-\ydnote{We can do it. Stronger, together.}
+\subsection{Solution of the SDE}
+First we solve the SDE for $Z_t$. 
+\\
+Let $F(x,t) = (x-1)e^t$. Then by Theorem \kknote{Yair, would you mind writing down the number of the theorem or lemma here from Oksendal's book pls?}, we know that $F_t$ satisfies the following stochastic process: 
+\begin{align}
+  \begin{split}
+  dF_t &= \frac{\partial{F}}{\partial t}(t,Z_t)+\frac{\partial{F}}{\partial{x}}(t,Z_t)dZ_t+\frac{1}{2}\frac{\partial^2F}{\partial{x}^2}(t,Z_t)dZ_t^2 \\ 
+  %
+  %
+  %
+       &= (Z_t-1)e^t+e^t\left( (1-Z_t)dt+\sqrt{\epsilon}dW_t \right) \\
+  %
+  %
+  %
+       &= \sqrt{\epsilon}e^tdW_t
+  \end{split}
+\end{align}
+Using integration by parts, the solution of the SDE is: 
+\begin{align}
+  \begin{split}
+F_t &= \sqrt{\epsilon}(e^tW_t-\int_{0}^{t}e^sW_sds)-F_0 \\
+%
+%  
+   &= \sqrt{\epsilon}(e^tW_t-\int_{0}^{t}e^sW_sds)-(x-1)
+\end{split}
+\end{align}
+Using $F_t = (Z_t-1)e^t$, this implies that the solution to our original SDE is: 
+\begin{equation}
+Z_t = 1+\sqrt{\epsilon}(W_t-e^{-t}\int_{0}^{1}e^sW_sds)-(x-1)e^{-t}
+\end{equation}
+
+
 %\printbibliography
 
 \end{document}
-
